@@ -61,3 +61,24 @@
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   border-radius: 8px;
 }
+
+.btn-delete {
+  color: red;
+  font-size: 32px;
+}
+
+.btn-delete:hover {
+  font-size: 34px;
+  transition-duration: .4s;
+  transition:ease-in-out
+}
+
+.btn-edit {
+  color: green;
+  font-size: 32px;
+}
+
+.btn-edit:hover {
+  font-size: 34px;
+  transition-duration: .4s;
+}

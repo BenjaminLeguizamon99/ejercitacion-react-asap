@@ -1,79 +1,73 @@
-import { useState } from 'react'
+import { useState} from 'react'
 import './App.css'
 import Form from './components/Form'
 import { type Task, type Status, type NewTask } from './types'
-
-
-
-const tareasIniciales: Task[] = [
-  {
-    id: 1,
-    name: "Dar de comer a los perros",
-    description: "Alimentar a los perros al mediodia.",
-    priority: 1,
-    responsable: "Benjamín",
-    estado: "Creado"
-  },
-  {
-    id: 2,
-    name: "Preparar almuerzo",
-    description: "Cocinar unas milanesas con fideos.",
-    priority: 2,
-    responsable: "Benjamin",
-    estado: "Creado"
-  },
-  {
-    id: 3,
-    name: "Hacer proyecto de React",
-    description: "Crear un gestor de tareas con react y typescript.",
-    priority: 1,
-    responsable: "Benjamin",
-    estado: "Creado"
-  },
-  {
-    id: 4,
-    name: "Ver documentacion Rentabilidad",
-    description: "Ver como funciona y como esta dividido el proyecto de rentabilidad",
-    priority: 1,
-    responsable: "Benjamin",
-    estado: "Creado"
-  },
-  {
-    id: 5,
-    name: "Ver documentacion Rentabilidad",
-    description: "Ver como funciona y como esta dividido el proyecto de rentabilidad",
-    priority: 1,
-    responsable: "Benjamin",
-    estado: "Creado"
-  }
-]
+import { RiDeleteBinLine } from "react-icons/ri";
+import { RiEditFill } from "react-icons/ri";
 
 const estadosPosibles : Status[] = ["Creado", "En curso", "Finalizado"]
 
 function App() {
-  const [tareas, setTareas] = useState<Task[]>(tareasIniciales)
+  const [tareas, setTareas] = useState<Task[]>([])
   const [seleccion, setSeleccion] = useState<Record<number, Status>>({});
+  const [edicionId, setEdicionId] = useState<number | null>(null);
 
+
+  // Cambiar de estado
   const cambiarEstado = (id:number, nuevoEstado:Status) => {
     setTareas(tareas.map(tarea =>
       tarea.id === id ? {...tarea, estado: nuevoEstado} : tarea
     ));
   }
 
+  // Dar de alta tarea
   const onCreate = (newTask:NewTask) => {
     const tareaCompleta: Task = {
       ...newTask,
-      id: tareas.length > 0 ? tareas[tareas.length - 1].id + 1 : 1,
+      id: tareas.length > 0 ? tareas[tareas.length - 1].id + 1 : 1, // Reemplazar por UUID.
       estado: "Creado"
     };
 
     setTareas([...tareas, tareaCompleta])
   }
 
+
+  // Eliminar tarea
+  const onDelete = (id:number) => {
+    setTareas(tarea => tarea.filter(t=> t.id !== id));
+  }
+
+  // Editar tarea
+  const editingTask = tareas.find(tarea => tarea.id === edicionId) ?? null;
+
+  const handleUpdate = (id: number, data: NewTask) => {
+    setTareas((prev) => prev.map((t) => (t.id === id? {...t, ...data} : t)))
+    setEdicionId(null);
+  };
+
+  //
+
   return (
     <>
       <h1>Gestor de tareas</h1>
-      <Form onCreate={onCreate} />
+      {editingTask ? (
+        <Form 
+          mode="edit"
+          initialValues={{
+            name : editingTask.name,
+            description : editingTask.description,
+            priority: editingTask.priority,
+            responsable: editingTask.responsable
+          }}
+          onSubmit={(data)=>handleUpdate(editingTask.id, data)}
+          onCancel={()=> setEdicionId(null)}
+          />
+      ): (
+      <Form
+        mode="create"
+        onSubmit={onCreate}
+        />
+      )}
       <div className='card-container'>
       {tareas.map((tarea) => (
         <div key={tarea.id} className='card'>
@@ -88,13 +82,15 @@ function App() {
             }
             >
             {estadosPosibles.map(estado => (
-              <option>{estado}</option>
+              <option key={estado}>{estado}</option>
             ))}
           </select>
           <button  className='btn-estado' onClick={()=>
             cambiarEstado(tarea.id, seleccion[tarea.id]?? tarea.estado)}
             disabled={!seleccion[tarea.id]}
             >Confirmar!</button>
+            <RiDeleteBinLine className='btn-delete' onClick={()=> onDelete(Number(tarea.id))}/>
+            <RiEditFill className='btn-edit' onClick={()=> setEdicionId(tarea.id)} />
         </div>
       ))}
       </div>
