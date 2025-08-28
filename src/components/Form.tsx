@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { type NewTask } from '../types';
+import './form.css'
 
 type Props = {
     onCreate: (task:NewTask) => void;
@@ -33,7 +34,7 @@ export default function Form ({onCreate}: Props) {
     }
 
     return(
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className='form-container'>
             <label htmlFor='name'>Ingrese el nombre de la tarea</label>
             <input 
                 type="text" 
@@ -67,7 +68,7 @@ export default function Form ({onCreate}: Props) {
                 value={responsable}
                 onChange={(e) => setResponsable(e.target.value)}
                 />
-            <button type="submit">Crear tarea</button>
+            <button type="submit" className='btn-form'>Crear tarea</button>
         </form>
     )
 }

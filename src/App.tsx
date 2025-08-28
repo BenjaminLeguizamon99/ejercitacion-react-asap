@@ -4,54 +4,10 @@ import Form from './components/Form'
 import { type Task, type Status, type NewTask } from './types'
 
 
-
-const tareasIniciales: Task[] = [
-  {
-    id: 1,
-    name: "Dar de comer a los perros",
-    description: "Alimentar a los perros al mediodia.",
-    priority: 1,
-    responsable: "Benjamín",
-    estado: "Creado"
-  },
-  {
-    id: 2,
-    name: "Preparar almuerzo",
-    description: "Cocinar unas milanesas con fideos.",
-    priority: 2,
-    responsable: "Benjamin",
-    estado: "Creado"
-  },
-  {
-    id: 3,
-    name: "Hacer proyecto de React",
-    description: "Crear un gestor de tareas con react y typescript.",
-    priority: 1,
-    responsable: "Benjamin",
-    estado: "Creado"
-  },
-  {
-    id: 4,
-    name: "Ver documentacion Rentabilidad",
-    description: "Ver como funciona y como esta dividido el proyecto de rentabilidad",
-    priority: 1,
-    responsable: "Benjamin",
-    estado: "Creado"
-  },
-  {
-    id: 5,
-    name: "Ver documentacion Rentabilidad",
-    description: "Ver como funciona y como esta dividido el proyecto de rentabilidad",
-    priority: 1,
-    responsable: "Benjamin",
-    estado: "Creado"
-  }
-]
-
 const estadosPosibles : Status[] = ["Creado", "En curso", "Finalizado"]
 
 function App() {
-  const [tareas, setTareas] = useState<Task[]>(tareasIniciales)
+  const [tareas, setTareas] = useState<Task[]>([])
   const [seleccion, setSeleccion] = useState<Record<number, Status>>({});
 
   const cambiarEstado = (id:number, nuevoEstado:Status) => {
@@ -63,7 +19,7 @@ function App() {
   const onCreate = (newTask:NewTask) => {
     const tareaCompleta: Task = {
       ...newTask,
-      id: tareas.length > 0 ? tareas[tareas.length - 1].id + 1 : 1,
+      id: tareas.length > 0 ? tareas[tareas.length - 1].id + 1 : 1, // Reemplazar por UUID.
       estado: "Creado"
     };
 
