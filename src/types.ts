@@ -1,5 +1,5 @@
 export type Task = {
-    id: number;
+    id: string;
     name: string;
     description: string;
     priority: number;
@@ -17,5 +17,6 @@ export type NewTask = {
     name: string;
     description: string;
     priority: number;
-    responsable: string
+    responsable: string;
+    estado?:Status
 }

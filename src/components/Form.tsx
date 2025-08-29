@@ -1,110 +1,73 @@
 import { useState, useEffect } from 'react'
-import { type NewTask, type Task } from '../types';
+import { type NewTask } from '../types';
+import { useAppDispatch } from '../app/hooks';
+import { addTask } from '../state/tasksSlice';
 import './form.css'
 
-type Props = {
-    onCreate: (task:NewTask) => void;
-};
+type FormMode = 'create' | 'edit'
 
 type FormProps = {
-    mode: "create" | "edit";
-    initialValues?:Partial<NewTask>;
-    onSubmit: (data: NewTask) => void;
-    onCancel?: () => void;
-};
+    mode: FormMode
+    onSubmit: (data: NewTask) => void
+    onCancel?: () => void
+    initialValues?: {
+        name: string
+        description: string
+        priority: number
+        responsable: string
+    }
+}
 
-export default function Form ({mode, initialValues, onSubmit, onCancel}: FormProps) {
+export default function Form({ mode, onSubmit, onCancel, initialValues }: FormProps) {
+    const dispatch = useAppDispatch()
+    const posiblesValores: number[] = [1, 2, 3, 4, 5]
+    const [form, setForm] = useState({
+        name: '',
+        description: '',
+        priority: 1,
+        responsable: '',
+    })
 
-    const posiblesValores:number[] = [1, 2, 3, 4, 5]
-    const [name, setName] = useState<string>(initialValues?.name ?? "");
-    const [description, setDescription] = useState<string>(initialValues?.description ?? "");
-    const [priority, setPriority] = useState<number>(initialValues?.priority ??1);
-    const [responsable, setResponsable] = useState<string>(initialValues?.responsable ?? "");
-
-
-    useEffect(()=> {
-        if(!initialValues) return;
-        setName(initialValues.name ?? '');
-        setDescription(initialValues.description ?? '');
-        setPriority(initialValues.priority ?? 1);
-        setResponsable(initialValues.responsable ?? '');
-    }, [initialValues])
+    useEffect(() => {
+        if (mode === 'edit' && initialValues) setForm(initialValues)
+    }, [mode, initialValues])
 
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        const payload: NewTask = {
-            name:name.trim(),
-            description: description.trim(),
-            priority,
-            responsable: responsable.trim()
-        };
-
-        onSubmit(payload);
-
-        //si es creacion de una nueva tarea, limpiamos
-        if(mode === 'create') {
-            setName("");
-            setDescription("");
-            setPriority(1);
-            setResponsable(""); 
-        }
-        
-        
-        const newTask:NewTask = {
-            name: name,
-            description: description,
-            priority: priority,
-            responsable: responsable
-        };
-
-        //onCreate(newTask);
+    const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const { name, value } = e.target
+        setForm(prev => ({ ...prev, [name]: value }))
     }
 
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault()
 
-    return(
+        if (mode === 'create') {
+            // Crear directamente en Redux
+            dispatch(addTask(form))
+        } else {
+            // Editar: delega al padre
+            onSubmit(form)
+        }
+
+        setForm({ name: '', description: '', priority: 1, responsable: '' })
+    }
+
+    return (
         <form onSubmit={handleSubmit} className='form-container'>
-            <h2>{mode === 'create' ? "Crear Tarea" : "Editar Tarea"}</h2>
-            <label htmlFor='name'>Ingrese el nombre de la tarea</label>
-            <input 
-                type="text" 
-                id='name' 
-                value={name} 
-                placeholder="Realizar validacion de datos..." 
-                onChange={(e) => setName(e.target.value)} />
-
-            <label htmlFor='descripcion'>Ingrese una descripcion de la tarea</label>
-            <textarea
-                id='descripcion'
-                placeholder='En esta tarea tengo que...'
-                value={description}
-                onChange={(e)=> setDescription(e.target.value)}
-            />
-            <label htmlFor='prioridad'>Ingrese una prioridad de la tarea</label>
-            <select 
-                id="prioridad"
-                value={priority}
-                onChange={(e) => setPriority(Number(e.target.value))}
-                >
+            <input name="name" value={form.name} onChange={onChange} placeholder="Nombre" />
+            <textarea name="description" value={form.description} onChange={onChange} placeholder="Descripción" />
+            <select
+                name='priority'
+                value={form.priority}
+                onChange={onChange}
+            >
                 {posiblesValores.map(valor => (
                     <option value={valor} key={valor}>{valor}</option>
                 )
                 )}
             </select>
-            <label htmlFor='responsable'>Ingrese un responsable</label>
-            <input 
-                id='responsable'
-                type="text" 
-                value={responsable}
-                onChange={(e) => setResponsable(e.target.value)}
-                />
-            <button type="submit" className='btn-form'>{mode === "create" ? "Crear tarea" : "Guardar cambios"}</button>
-            {mode === "edit" && onCancel && (
-                <button type="button" onClick={onCancel}>
-                    Cancelar
-                </button>
-            )}
+            <input name="responsable" value={form.responsable} onChange={onChange} placeholder="Responsable" />
+            <button type="submit" className='btn-form'>Crear</button>
         </form>
     )
 }
