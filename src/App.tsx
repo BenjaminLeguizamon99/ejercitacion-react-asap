@@ -96,16 +96,17 @@ function App() {
             >
               Confirmar
             </button>
+            <div className='contenedor-botones-eliminar-editar'>
+              <RiDeleteBinLine
+                className='btn-delete'
+                onClick={() => onDelete(tarea.id)}
+              />
 
-            <RiDeleteBinLine
-              className='btn-delete'
-              onClick={() => onDelete(tarea.id)}
-            />
-
-            <RiEditFill
-              className='btn-edit'
-              onClick={() => setEdicionId(tarea.id)}
-            />
+              <RiEditFill
+                className='btn-edit'
+                onClick={() => setEdicionId(tarea.id)}
+              />
+            </div>
           </div>
         ))}
       </div>
