@@ -1,69 +1,56 @@
-# React + TypeScript + Vite
+# 📝 Gestor de Tareas en React + TypeScript
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto es una aplicación de ejemplo para gestionar tareas (alta, edición, eliminación y cambio de estado).  
+Cuenta con **dos implementaciones diferentes**, cada una en su propia rama:
 
-Currently, two official plugins are available:
+- **`useState` branch** → la gestión de tareas está implementada utilizando el estado local de React (`useState`).
+- **`redux` branch** → la gestión de tareas está implementada utilizando **Redux Toolkit** para el manejo global del estado.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Funcionalidades actuales
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Crear nuevas tareas con:
+  - Nombre
+  - Descripción
+  - Prioridad
+  - Responsable
+- Editar tareas existentes
+- Eliminar tareas
+- Cambiar estado de la tarea (`Creado`, `En curso`, `Finalizado`)
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## 🔧 Mejoras pendientes
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- ✅ **Ventana modal de confirmación** al eliminar una tarea.  
+- ✅ **Mejorar los estilos** de la UI para que sea más atractiva/responsiva.  
+- ✅ **Validaciones en el formulario** (campos requeridos, rango de prioridad, etc).  
+- ✅ Otros detalles de UX (feedback visual, notificaciones, etc).
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 📦 Librerías utilizadas
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- [Redux Toolkit](https://redux-toolkit.js.org/) → manejo global del estado.  
+- [react-icons](https://react-icons.github.io/react-icons/) → íconos (editar, eliminar).  
+- [uuid](https://github.com/uuidjs/uuid) → generación de IDs únicos para las tareas.  
+
+---
+
+## ▶️ Cómo correr el proyecto
+
+1. Clonar el repo:
+   ```bash
+   git clone https://github.com/tu-usuario/tu-repo.git
+   cd tu-repo
+2. Instalar dependencias
+  npm install
+3. Levantar el servidor de desarrollo
+  npm run dev
+
+
+## 📂 Ramas del proyecto
+
+- **`master`** → implementación del gestor de tareas utilizando **useState**.  
+- **`rama-redux`** → implementación del gestor de tareas utilizando **Redux Toolkit**.  
